@@ -6,7 +6,8 @@ import L from "leaflet"
 import "leaflet/dist/leaflet.css"
 import { Button } from "@/components/ui/button"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ZoomInAreaIcon, ZoomOutAreaIcon, Navigation01Icon, Search01Icon } from "@hugeicons/core-free-icons"
+import { ZoomInAreaIcon, ZoomOutAreaIcon, Navigation01Icon, Search01Icon, Home01Icon } from "@hugeicons/core-free-icons"
+import { renderToString } from "react-dom/server"
 import {
   getCities,
   getCityProperties,
@@ -28,21 +29,28 @@ const defaultZoom = 6
 // ─── Property pin icon ─────────────────────────────────────────────────────────
 
 function createPropertyIcon(): L.DivIcon {
+  const html = renderToString(
+    <div style={{
+      width: '28px', height: '28px',
+      background: 'hsl(220, 85%, 50%)',
+      border: '2px solid white',
+      borderRadius: '50% 50% 50% 0',
+      transform: 'rotate(-45deg)',
+      boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center'
+    }}>
+      <div style={{
+        transform: 'rotate(45deg)',
+        color: 'white',
+        display: 'flex', alignItems: 'center', justifyContent: 'center'
+      }}>
+        <HugeiconsIcon icon={Home01Icon} size={18} />
+      </div>
+    </div>
+  )
+
   return L.divIcon({
-    html: `<div style="
-      width: 28px; height: 28px;
-      background: hsl(220, 85%, 50%);
-      border: 2px solid white;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      display: flex; align-items: center; justify-content: center;
-    "><div style="
-      transform: rotate(45deg);
-      color: white;
-      font-size: 12px;
-      font-weight: bold;
-    ">🏠</div></div>`,
+    html,
     className: "",
     iconSize: [28, 28],
     iconAnchor: [14, 28],
