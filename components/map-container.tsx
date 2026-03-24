@@ -15,16 +15,19 @@ const MapView = dynamic(() => import("@/components/map-view"), {
 })
 
 export function MapContainer({
+  selectedCity,
   selectedProperty,
   onCitySelect,
   onPropertySelect,
 }: {
+  selectedCity?: City | null
   selectedProperty?: Property | null
   onCitySelect?: (city: City) => void
   onPropertySelect?: (property: Property) => void
 }) {
   return (
     <MapView
+      selectedCity={selectedCity}
       selectedProperty={selectedProperty}
       onCitySelect={onCitySelect}
       onPropertySelect={onPropertySelect}

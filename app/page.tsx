@@ -4,10 +4,10 @@ import * as React from "react"
 import { IconSidebar } from "@/components/icon-sidebar"
 import { RealEstateSidePanel } from "@/components/real-estate-side-panel"
 import { MapContainer } from "@/components/map-container"
-import { type City, type Property } from "@/lib/mock-data"
+import { type City, type Property, getCityByName } from "@/lib/mock-data"
 
 export default function Page() {
-  const [selectedCity, setSelectedCity] = React.useState<City | null>(null)
+  const [selectedCity, setSelectedCity] = React.useState<City | null>(() => getCityByName("Paris") || null)
   const [selectedProperty, setSelectedProperty] = React.useState<Property | null>(null)
 
   return (
@@ -15,6 +15,7 @@ export default function Page() {
       <IconSidebar />
       <main className="flex-1 relative overflow-hidden">
         <MapContainer
+          selectedCity={selectedCity}
           selectedProperty={selectedProperty}
           onCitySelect={(city) => {
             setSelectedCity(city)

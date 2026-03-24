@@ -146,15 +146,21 @@ function CustomZoomControl() {
 // ─── Search bar ────────────────────────────────────────────────────────────────
 
 function SearchBar({
+  initialQuery = "",
   onCitySelect,
   onDepartmentSelect,
 }: {
+  initialQuery?: string
   onCitySelect: (city: City) => void
   onDepartmentSelect: (dep: Department) => void
 }) {
-  const [query, setQuery] = React.useState("")
+  const [query, setQuery] = React.useState(initialQuery)
   const [open, setOpen] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
+
+  React.useEffect(() => {
+    setQuery(initialQuery)
+  }, [initialQuery])
 
   const results = React.useMemo(() => {
     if (!query.trim()) return { departments: [], cities: [] }
@@ -288,10 +294,12 @@ function MapClickHandler({
 // ─── Main export ───────────────────────────────────────────────────────────────
 
 export default function MapView({
+  selectedCity: initialSelectedCity,
   selectedProperty,
   onCitySelect,
   onPropertySelect,
 }: {
+  selectedCity?: City | null
   selectedProperty?: Property | null
   onCitySelect?: (city: City) => void
   onPropertySelect?: (property: Property) => void
@@ -307,6 +315,14 @@ export default function MapView({
   const [modalOpen, setModalOpen] = React.useState(false)
   const suppressMapClickRef = React.useRef(false)
   const markerRefs = React.useRef<{ [key: string]: L.Marker | null }>({})
+
+  // Sélection initiale au montage (ex: Paris)
+  React.useEffect(() => {
+    if (initialSelectedCity) {
+      handleCitySelect(initialSelectedCity)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Ouvrir le popup programmatic quand une property est sélectionnée via le side panel
   React.useEffect(() => {
@@ -345,6 +361,7 @@ export default function MapView({
   return (
     <div className="relative h-full w-full">
       <SearchBar
+        initialQuery={selectedCity?.name || ""}
         onCitySelect={(city) => handleCitySelect(city)}
         onDepartmentSelect={handleDepartmentSelect}
       />
